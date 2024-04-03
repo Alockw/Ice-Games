@@ -1,11 +1,79 @@
+//Crear menu
+gestion jugadores
+    que quiere hacer
+    1. iniciar sesion
+    2. registar usuario
+    3. consulta jugadores 
+    4. jugar
+
+// Registrar usuario
+class CreateAccount 
+{
+public:
+    string completeName;
+    string gmail;
+    
+    int document;
+    int documentExpedition;
+    int dateOfBirth;
+    int passwordCreated;  
+    int phoneNumber;
+    int loginAttempts = 3;
+
+    bool login() 
+    {
+        int phoneNumber1;
+        int password1;
+
+        cout << "Phone number: ";
+        cin >> phoneNumber1;
+
+        if (phoneNumber1 == phoneNumber) 
+        {
+            cout << "Password: ";
+            cin >> password1;
+
+            if (password1 == passwordCreated) 
+            {
+                cout << "Login successful." << endl;
+                return true;
+            } 
+            else 
+            {
+                loginAttempts--;
+                if (loginAttempts > 0) 
+                {
+                    cout << "Incorrect password, try again." << endl;
+                } 
+                else 
+                {
+                    cout << "You have used the maximum number of attempts. Your account is blocked. Try again later." << endl;
+                }
+            }
+        } 
+        else 
+        {
+            cout << "Incorrect phone number." << endl;
+        }
+
+        return false;
+    }
+};
+
+
+//Iniciar sesion
+
+
+//
+--------------------------------
 #include <iostream>
 #include <string>
-#include <vector>
 #include <set>
 
 using namespace std;
 
-class Videojuego {
+class Videojuego 
+{
 private:
     string nombre;
     string plataforma;
@@ -51,7 +119,8 @@ public:
     {
         nombre = newNombre;
     }
-    void setPlataforma(const string& newPlataforma) {
+    void setPlataforma(const string& newPlataforma) 
+    {
         plataforma = newPlataforma;
     }
     void setDesarrollador(const string& newDesarrollador) 
@@ -73,9 +142,10 @@ public:
         categorias = newCategorias;
     }
 };
+
 // Ejemplo de uso de la clase Videojuego
 // int main() {
-//     vector<string> categorias = {"Acción", "Aventura"};
+//     set<string> categorias = {"Acción", "Aventura"};
 //     Videojuego juego("Ejemplo", 1, categorias, "DesarrolladorX", 2022, "PC");
 
 //     cout << "Nombre: " << juego.getNombre() << endl;
@@ -114,12 +184,12 @@ public:
         juegosFavoritos.push_back(juego);
     }
 
-    const std::vector<std::string>& obtenerJuegosFavoritos() const 
+    const vector<string>& obtenerJuegosFavoritos() const 
     {
         return juegosFavoritos;
     }
 
-    const std::string& obtenerNombre() const
+    const string& obtenerNombre() const
     {
         return nombre;
     }
