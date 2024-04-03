@@ -1,62 +1,22 @@
 #include <iostream>
-#include <string>
-#include <cstdlib>
-#include <ctime>
 #include <windows.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
-#include "videojuegos .h"
-//incluir las clases de juegos dentro de menu y hacer que el usario sea el que escoja 
+#include "string"
+
 using namespace std;
-void gotoxy(int x, int y)
-{
-    HANDLE hCon;
-    hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    COORD dwPos;
-    dwPos.X = x;
-    dwPos.Y = y;
-    SetConsoleCursorPosition(hCon, dwPos);
-}
-class Menu
-{
-public:
-    void mostrarMenu();
-    int obtenerOpcion();
-    void Menu::mostrarMenu()
-    {
-        cout << "Bienvenido al menú de juegos" << endl;
-        cout << "1. Jugar Snake" << endl;
-        cout << "2. Jugar Buscaminas" << endl;
-        cout << "3. Salir" << endl;
-        cout << "Elige una opción: ";
-    }
-
-    int Menu::obtenerOpcion()
-    {
-        int opcion;
-        cin >> opcion;
-        return opcion;
-    }
-};
+// Definición de la clase Snake
 class Snake
 {
 public:
-    static int juegosJugadosSnake;
     int x, y;
     int dx, dy;
     char cuerpo;
-    Snake::Snake()
-    {
-        juegosJugadosSnake++; // Incrementa el contador de Snake
-    }
-    void Snake::mostrarContadorSnake()
-    {
-        cout << "Has jugado Snake " << juegosJugadosSnake << " veces." << endl;
-    }
 };
 
+// Definición de la clase Fruta
 class Fruta
 {
 public:
@@ -64,20 +24,17 @@ public:
     char cuerpo = 254;
 };
 
+// Definición de la clase Juego
 class Juego
 {
-public:
-    void main();
-
 private:
     int score, nivel, velocidad;
     Snake snake[100];
     Fruta fruta;
     int tam = 4;
-    int c = 21, f = 64;
+    int c = 24, f = 79;
     bool gameover = false;
     void tablero();
-    // void inicio();
     void genFruta();
     void genSnake();
     void loop();
@@ -87,11 +44,26 @@ private:
     void cfruta();
     void muerte();
     void puntos();
-    // void menu();
     void portada();
     void muerte2();
+    int juegosJugadosSnake = 0; // Variable privada
+public:
+    void main();
+    void incrementarJuegosJugadosSnake() { juegosJugadosSnake++; } // Método para incrementar juegosJugadosSnake
+    int obtenerJuegosJugadosSnake() { return juegosJugadosSnake; } // Método para obtener el valor de juegosJugadosSnake
+
 };
 
+// Implementación de la función gotoxy
+void gotoxy(int x, int y)
+{
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+// Implementación de los métodos de la clase Juego
 void Juego::muerte2()
 {
     system("cls");
@@ -113,9 +85,9 @@ void Juego::muerte2()
         cout << t;
     }
 
-    string g4meover[] = {"  ____                       ___", " / ___| __ _ _ __ ___   ___ / _ \\__   _____ _ __ ",
-                         "| |  _ / _` | '_ ` _ \\ / _ \\ | | \\ \\ / / _ \\ '__|", "| |_| | (_| | | | | | |  __/ |_| |\\ V /  __/ | ",
-                         " \\____|\\__,_|_| |_| |_|\\___|\\___/  \\_/ \\___|_|"};
+    string g4meover[] = {" ____                       ___", " / ___| __ _ _ __ ___   ___ / _ \\__   _____ _ __ ",
+                         "| | _ / _` | '_ ` _ \\ / _ \\ | | \\ \\ / / _ \\ '__|", "| |_| | (_| | | | | | | __/ |_| |\\ V / __/ | ",
+                         " \\____|\\__,_|_| |_| |_|\\___|\\___/ \\_/ \\___|_|"};
     r = 2;
     for (int i = 0; i < 5; i++)
     {
@@ -124,10 +96,10 @@ void Juego::muerte2()
         cout << g4meover[i] << endl;
     }
 
-    string g4meover2[] = {"   _________         _________", "  /         \\       /         \\",
-                          " /  /~~~~~\\  \\     /  /~~~~~\\  \\", " |  |     |  |     |  |     |  |", " |  |     |  |     |  |     |  |",
-                          " |  |     |  |     |  |     |  |         /", " |  |     |  |     |  |     |  |       //", "(X  X)    \\  \\_____/  /     \\  \\_____/ /",
-                          " \\__/      \\         /       \\        /", "  |         ~~~~~~~~~         ~~~~~~~~", "  ^"};
+    string g4meover2[] = {"   _________         _________", " /         \\       /         \\",
+                          " / /~~~~~\\ \\     / /~~~~~\\ \\", " | |     | |     | |     | |", " | |     | |     | |     | |",
+                          " | |     | |     | |     | |         /", " | |     | |     | |     | |       //", "(X X)    \\ \\_____/ /     \\ \\_____/ /",
+                          " \\__/      \\         /       \\        /", " |         ~~~~~~~~~         ~~~~~~~~", " ^"};
     for (int i = 0; i < 11; i++)
     {
         gotoxy(20, r);
@@ -165,10 +137,10 @@ void Juego::portada()
         gotoxy(f, i);
         cout << t;
     }
-    string snkd[] = {"       ---_ ......._-_--.", "      (|\\ /      / /| \\  \\", "      /  /     .'  -=-'   `.",
-                     "     /  /    .'             )", "   _/  /   .'        _.)   /", "  / o   o        _.-' /  .'",
-                     "  \\          _.-'    / .'*|", "   \\______.-'//    .'.' \\*|", "    \\|  \\ | //   .'.' _ |*|",
-                     "     `   \\|//  .'.'_ _ _|*|", "      .  .// .'.' | _ _ \\*|", "      \\`-|\\_/ /    \\ _ _ \\*\\",
+    string snkd[] = {"       ---_ ......._-_--.", "      (|\\ /      / /| \\ \\", "      / /     .' -=-'   `.",
+                     "     / /    .'             )", "   _/ /   .'        _.)   /", " / o   o        _.-' / .'",
+                     " \\          _.-'    / .'*|", "   \\______.-'//    .'.' \\*|", "    \\| \\ | //   .'.' _ |*|",
+                     "     `   \\|// .'.'_ _ _|*|", "      . .// .'.' | _ _ \\*|", "      \\`-|\\_/ /    \\ _ _ \\*\\",
                      "                     \\ _ _ \\*", "                      \\ _ _ \\ ", "                       \\_"};
 
     r = 2;
@@ -179,8 +151,8 @@ void Juego::portada()
         cout << snkd[i] << endl;
     }
 
-    string snkl[] = {"                     __     ", "   _________  ____ _/ /_____", "  / ___/ __ \\/ __ `/ //_/ _ \\",
-                     " (__  ) / / / /_/ / ,< /  __/", "/____/_/ /_/\\__,_/_/|_|\\___/"};
+    string snkl[] = {"                     __     ", "   _________ ____ _/ /_____", " / ___/ __ \\/ __ `/ //_/ _ \\",
+                     " (__ ) / / / /_/ / ,< / __/", "/____/_/ /_/\\__,_/_/|_|\\___/"};
     for (int i = 0; i < 5; i++)
     {
         gotoxy(22, r);
@@ -189,7 +161,7 @@ void Juego::portada()
     }
     gotoxy(23, 23);
     cout << "Precione ENTER para empezar";
-    system("pause>dsdsd");
+    system("pause");
 }
 
 void Juego::puntos()
@@ -201,6 +173,7 @@ void Juego::puntos()
     gotoxy(f + 2, 6);
     cout << "Length: " << tam;
 }
+
 void Juego::tablero()
 {
     char t = 178;
@@ -219,16 +192,48 @@ void Juego::tablero()
         cout << t;
     }
 }
-
+void Juego::genSnake(){
+        int i;
+        snake[0].x=30;
+        snake[0].y=10;
+        snake[0].dx=1;
+    snake[0].dy=0;
+        snake[0].cuerpo=157;
+        
+        
+        
+    for(i=1;i < tam; i++){
+        snake[i].x=snake[i-1].x-1;
+        snake[i].y=snake[i-1].y;
+        snake[i].cuerpo=184;
+    }
+    
+ 
+    for(i=0; i<tam; i++){
+        gotoxy(snake[i].x,snake[i].y);
+        cout<<snake[i].cuerpo;
+    }
+}
 void Juego::genFruta()
 {
-
     fruta.x = 2 + (rand() % (f - 2));
     fruta.y = 2 + (rand() % (c - 2));
     gotoxy(fruta.x, fruta.y);
     cout << fruta.cuerpo;
 }
-
+void Juego::cfruta(){
+        if(snake[0].x==fruta.x && snake[0].y==fruta.y){
+                genFruta();
+        tam+=1;
+        snake[tam-1].cuerpo=184;
+        score+=1;
+        if(tam%10==0){
+                        nivel++;
+                        velocidad-=20;
+                }
+ 
+    }
+}
 void Juego::muerte()
 {
     if (snake[0].x == 1 || snake[0].x == f || snake[0].y == 1 || snake[0].y == c)
@@ -246,6 +251,7 @@ void Juego::muerte()
 void Juego::tecla()
 {
     int i;
+    (void)i;
     char key;
 
     if (!gameover)
@@ -276,45 +282,6 @@ void Juego::tecla()
         }
     }
 }
-
-void Juego::genSnake()
-{
-    int i;
-    snake[0].x = 30;
-    snake[0].y = 10;
-    snake[0].dx = 1;
-    snake[0].dy = 0;
-    snake[0].cuerpo = 157;
-
-    for (i = 1; i < tam; i++)
-    {
-        snake[i].x = snake[i - 1].x - 1;
-        snake[i].y = snake[i - 1].y;
-        snake[i].cuerpo = 184;
-    }
-
-    for (i = 0; i < tam; i++)
-    {
-        gotoxy(snake[i].x, snake[i].y);
-        cout << snake[i].cuerpo;
-    }
-}
-
-void Juego::cfruta()
-{
-    if (snake[0].x == fruta.x && snake[0].y == fruta.y)
-    {
-        genFruta();
-        tam += 1;
-        snake[tam - 1].cuerpo = 184;
-        score += 1;
-        if (tam % 10 == 0)
-        {
-            nivel++;
-            velocidad -= 20;
-        }
-    }
-}
 void Juego::actualizar()
 {
     int i;
@@ -339,22 +306,19 @@ void Juego::imprimir()
         cout << snake[i].cuerpo;
     }
 }
-void Juego::loop()
-{
-    while (!gameover)
-    {
-        cfruta();
-        puntos();
-        actualizar();
-        imprimir();
-        tecla();
-        tecla();
-        tecla();
-        muerte();
-        Sleep(velocidad);
-    }
+void Juego::loop(){
+        while(!gameover){
+                cfruta();
+                puntos();
+                actualizar();
+                imprimir();
+                tecla();
+                tecla();
+                tecla();
+                muerte();
+                Sleep(velocidad);
+        }
 }
-
 void Juego::main()
 {
     system("color 0a");
@@ -371,8 +335,11 @@ void Juego::main()
     genFruta();
     loop();
     muerte2();
-    main();
+    // Eliminamos la recursión en main()
+    // main();
 }
+
+// Definición de la clase Buscaminas
 class Buscaminas
 {
 private:
@@ -382,192 +349,193 @@ private:
     int fila = 0;
     int columna = 0;
     bool fin = false;
-    int m[10][10];     // Asegúrate de que el tamaño sea suficiente para todos los niveles
-    string mT[10][10]; // Asegúrate de que el tamaño sea suficiente para todos los niveles
-
+    int m[10][10];
+    string mT[10][10];
+    int juegosJugadosBuscaminas = 0; // Variable privada
 public:
-    static int juegosJugadosBuscaminas; // Variable estática para contar los juegos jugados
-    int getNivel() const { return nivel; }
-    int getVidas() const { return vidas; }
-    int getIntentos() const { return intentos; }
-    int getFila() const { return fila; }
-    int getColumna() const { return columna; }
-    bool getFin() const { return fin; }
-    Buscaminas::Buscaminas()
-    {
-        juegosJugadosBuscaminas++; // Incrementa el contador de Buscaminas
-    }
-    void Buscaminas::mostrarContadorBuscaminas()
-    {
-        cout << "Has jugado Buscaminas " << juegosJugadosBuscaminas << " veces." << endl;
-    }
-
-    void nivelBuscaMinas()
-    {
-        cout << "   selecciona el nivel de juego" << endl;
-        cout << endl;
-        cout << "   Nivel             Vidas           Escribe" << endl;
-        cout << endl;
-        cout << "   Practica          1000            1" << endl;
-        cout << "   Facil             8               2" << endl;
-        cout << "   Medio             5               3" << endl;
-        cout << "   Dificil           3               4" << endl;
-        cout << "   Muy Dificil       1               5" << endl;
-        cout << endl;
-        cout << "   Ingresa el tu Nivel: ";
-        cin >> nivel;
-        cout << endl;
-        switch (nivel)
-        {
-        case 1:
-            nivel = 10;
-            vidas = 1000;
-            fin = false;
-            intentos = 0;
-            system("cls");
-            break;
-        case 2:
-            nivel = 8;
-            vidas = 8;
-            fin = false;
-            intentos = 0;
-            system("cls");
-            break;
-        case 3:
-            nivel = 6;
-            vidas = 5;
-            fin = false;
-            intentos = 0;
-            system("cls");
-            break;
-        case 4:
-            nivel = 6;
-            vidas = 3;
-            fin = false;
-            intentos = 0;
-            system("cls");
-            break;
-        case 5:
-            nivel = 5;
-            vidas = 1;
-            fin = false;
-            intentos = 0;
-            system("cls");
-            break;
-        default:
-            system("cls");
-            cout << "   escribe un nivel valido entre 1 y 5" << endl;
-            nivelBuscaMinas(); // Llama a la función recursivamente en lugar de usar goto
-            break;
-        }
-        srand(static_cast<unsigned int>(time(NULL))); // Inicializa la semilla solo una vez
-    }
-
-    void matrisLogica()
-    {
-        for (int i = 0; i < nivel; i++)
-        {
-            for (int j = 0; j < nivel; j++)
-            {
-                m[i][j] = rand() % (2 - 0) + (i * 100) + (j * 10);
-            }
-        }
-    }
-
-    void matrisVisible()
-    {
-        for (int i = 0; i < nivel; i++)
-        {
-            for (int j = 0; j < nivel; j++)
-            {
-                mT[i][j] = "#";
-            }
-        }
-    }
-
-    void imprimirMatris()
-    {
-        cout << "                 Buscaminas" << vidas << endl;
-        cout << "     Intentos:" << intentos << "      Vidas: " << vidas - 1 << endl;
-        for (int i = 0; i < nivel; i++)
-        {
-            cout << endl;
-            for (int j = 0; j < nivel; j++)
-            {
-                cout << "   " << mT[i][j];
-            }
-            cout << endl;
-        }
-    }
-
-    void logicaBuscaminas()
-    {
-        while (fin == false)
-        {
-            cout << "   digite la fila entre 0 y " << nivel - 1 << " ";
-            cin >> fila;
-            cout << endl;
-            if (fila < 0 || fila > nivel - 1)
-            {
-                cout << "   escribe un numero entre 0 y " << nivel - 1 << " " << endl;
-                continue; // Usa continue en lugar de goto
-            }
-            cout << "   digite la columna entre 0 y " << nivel - 1 << " ";
-            cin >> columna;
-            cout << endl;
-            if (columna < 0 || columna > nivel - 1)
-            {
-                cout << "   escribe un numero entre 0 y " << nivel - 1 << " " << endl;
-                continue; // Usa continue en lugar de goto
-            }
-            intentos++;
-            if (m[fila][columna] % 2 == 0)
-            {
-                mT[fila][columna] = " ";
-            }
-            if (m[fila][columna] % 2 == 1)
-            {
-                mT[fila][columna] = "*";
-                vidas--;
-                if (vidas == 0)
-                {
-                    fin = true;
-                }
-            }
-            system("cls");
-            if (fin == false)
-            {
-                imprimirMatris();
-            }
-            if (fin == true)
-            {
-                cout << "                 Buscaminas" << vidas << endl;
-                cout << "     Intentos:" << intentos << "      Vidas: " << vidas << endl;
-                cout << endl;
-                cout << "                     GAME OVER" << endl;
-                cout << "                     Has perdido" << endl;
-                cout << endl;
-                Sleep(2000);
-                system("cls");
-                cout << "Intentalo nuevamente" << endl;
-                Sleep(1000);
-                system("cls");
-                nivelBuscaMinas(); // Reinicia el juego
-            }
-        }
-    }
+    void main();
+    void incrementarJuegosJugadosBuscaminas() { juegosJugadosBuscaminas++; } // Método para incrementar juegosJugadosBuscaminas
+    int obtenerJuegosJugadosBuscaminas() { return juegosJugadosBuscaminas; } // Método para obtener el valor de juegosJugadosBuscaminas
 };
 
+
+// Implementación de los métodos de la clase Buscaminas
+void Buscaminas::main()
+{
+    int nivel = 0;
+    int vidas = 0;
+    int intentos = 0;
+    int fila = 0;
+    int columna = 0;
+    bool fin = false;
+    INICIO:
+    cout<<endl;
+    cout<<"         Bienvenidos al Buscaminas"<<endl;
+    cout<<endl;
+    cout<<"   Este juego consiste en poder seleccionar"<<endl;
+    cout<<"   todos los bloques sin hacer explotar las minas."<<endl;
+    cout<<endl;
+    NIVEL:
+    cout<<endl;
+    cout<<"   selecciona el nivel de juego"<<endl;
+    cout<<endl;
+    cout<<"   Nivel             Vidas           Escribe"<<endl;
+    cout<<endl;
+    cout<<"   Practica          1000            1"<<endl;
+    cout<<"   Facil             8               2"<<endl;
+    cout<<"   Medio             5               3"<<endl;
+    cout<<"   Dificil           3               4"<<endl;
+    cout<<"   Muy Dificil       1               5"<<endl;
+    cout<<endl;
+    cout<<"   Ingresa el tu Nivel: ";cin>>nivel;cout<<endl;
+
+    switch (nivel)
+    {
+    case 1:
+        nivel = 10;
+        vidas = 1000;
+        fin = false;
+        intentos = 0;
+        system("cls");
+        break;
+    case 2:
+        nivel = 8;
+        vidas = 8;
+        fin = false;
+        intentos = 0;
+        system("cls");
+        break;
+    case 3:
+        nivel = 6;
+        vidas = 5;
+        fin = false;
+        intentos = 0;
+        system("cls");
+        break;
+    case 4:
+        nivel = 6;
+        vidas = 3;
+        fin = false;
+        intentos = 0;
+        system("cls");
+        break;
+    case 5:
+        nivel = 5;
+        vidas = 1;
+        fin = false;
+        intentos = 0;
+        system("cls");
+        break;
+    default:
+        system("cls");
+        cout << "Escribe un nivel válido entre 1 y 5" << endl;
+        goto NIVEL; 
+        break;
+    }
+
+    int m[nivel][nivel];
+    string mT[nivel][nivel];
+    srand(time(NULL));
+
+    // Lógica del juego
+    while (fin == false)
+    {FIL:
+        cout<<"   digite la fila entre 0 y "<<nivel-1<<" ";cin>>fila;cout<<endl;
+        if (fila == 20) {
+            /* code */
+        }
+        if (fila < 0 || fila > nivel-1) {
+            cout<<"   escribe un numero entre 0 y "<<nivel-1<<" "<<endl;
+            goto FIL;
+        }
+        COL:
+        cout<<"   digite la columna entre 0 y "<<nivel-1<<" ";cin>>columna;cout<<endl;
+        if (columna < 0 || columna > nivel-1) {
+            cout<<"   escribe un numero entre 0 y "<<nivel-1<<" "<<endl;
+            goto COL;
+        }
+        intentos++;
+        if (m[fila][columna]%2== 0) {
+            mT[fila][columna] = " ";
+        }
+        if (m[fila][columna]%2== 1) {
+            mT[fila][columna] = "*";
+            vidas--;
+            if (vidas==0) {
+                fin=true;
+            }
+        }
+        system("cls");
+        if (fin==false) {
+            cout<<"                 Buscaminas"<<vidas<<endl;
+            cout<<"     Intentos:"<<intentos<<"      Vidas: "<<vidas-1<<endl;
+            for (int i = 0;i < nivel; i++) {
+                cout<<endl;
+                for (int j = 0; j < nivel; j++) {
+                cout<<"   "<<mT[i][j];
+                }
+                cout<<endl;
+            }
+            cout<<endl;
+        }
+        if (fin == true) {
+            cout<<"                 Buscaminas"<<vidas<<endl;
+            cout<<"     Intentos:"<<intentos<<"      Vidas: "<<vidas<<endl;
+            cout<<endl;
+            cout<<"                     GAME OVER"<<endl;
+            cout<<"                     Has perdido"<<endl;
+            cout<<endl;
+            Sleep(2000);
+            system("cls");
+            cout<<"Intentalo nuevamente"<<endl;
+            Sleep(1000);
+            system("cls");
+            goto INICIO;
+        }
+    }
+}
+
+// Función principal del programa
 int main()
 {
-    Snake juegoSnake;
-    juegoSnake.mostrarContadorSnake();
-    Buscaminas juego;
-    juego.nivelBuscaMinas();
-    juego.matrisLogica();
-    juego.matrisVisible();
-    juego.imprimirMatris();
-    juego.logicaBuscaminas();
-    juego.mostrarContadorBuscaminas();
+    srand(time(NULL)); // Inicialización de la semilla para rand()
+
+    int opcion;
+    Juego juego;
+    Buscaminas buscaminas;
+
+    do
+    {
+        cout << "Bienvenido al menú de juegos" << endl;
+        cout << "1. Jugar Snake" << endl;
+        cout << "2. Jugar Buscaminas" << endl;
+        cout << "3. Cuánto a jugado cada juego" << endl;
+        cout << "4. Salir" << endl;
+        cout << "Elige una opción: ";
+        cin >> opcion;
+
+        switch (opcion)
+        {
+        case 1:
+            juego.main();
+            juego.incrementarJuegosJugadosSnake();
+            break;
+        case 2:
+            buscaminas.main();
+            buscaminas.incrementarJuegosJugadosBuscaminas();
+            break;
+        case 3:
+            cout << "Juegos jugados en Snake: " << juego.obtenerJuegosJugadosSnake() << endl;
+            cout << "Juegos jugados en Buscaminas: " << buscaminas.obtenerJuegosJugadosBuscaminas() << endl;
+            break;
+        case 4:
+            cout << "Saliendo del programa..." << endl;
+            break;
+        default:
+            cout << "Opción no válida. Por favor, elige una opción del menú." << endl;
+            break;
+        }
+    } while (opcion != 4); // El bucle continúa hasta que el usuario elija salir
+
     return 0;
 }
