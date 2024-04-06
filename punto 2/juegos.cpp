@@ -4,7 +4,8 @@
 #include <conio.h>
 #include <time.h>
 #include "string"
-
+#include <ctime>
+#include <cstdlib>
 using namespace std;
 
 // Definición de la clase Snake
@@ -51,7 +52,6 @@ public:
     void main();
     void incrementarJuegosJugadosSnake() { juegosJugadosSnake++; } // Método para incrementar juegosJugadosSnake
     int obtenerJuegosJugadosSnake() { return juegosJugadosSnake; } // Método para obtener el valor de juegosJugadosSnake
-
 };
 
 // Implementación de la función gotoxy
@@ -192,26 +192,26 @@ void Juego::tablero()
         cout << t;
     }
 }
-void Juego::genSnake(){
-        int i;
-        snake[0].x=30;
-        snake[0].y=10;
-        snake[0].dx=1;
-    snake[0].dy=0;
-        snake[0].cuerpo=157;
-        
-        
-        
-    for(i=1;i < tam; i++){
-        snake[i].x=snake[i-1].x-1;
-        snake[i].y=snake[i-1].y;
-        snake[i].cuerpo=184;
+void Juego::genSnake()
+{
+    int i;
+    snake[0].x = 30;
+    snake[0].y = 10;
+    snake[0].dx = 1;
+    snake[0].dy = 0;
+    snake[0].cuerpo = 157;
+
+    for (i = 1; i < tam; i++)
+    {
+        snake[i].x = snake[i - 1].x - 1;
+        snake[i].y = snake[i - 1].y;
+        snake[i].cuerpo = 184;
     }
-    
- 
-    for(i=0; i<tam; i++){
-        gotoxy(snake[i].x,snake[i].y);
-        cout<<snake[i].cuerpo;
+
+    for (i = 0; i < tam; i++)
+    {
+        gotoxy(snake[i].x, snake[i].y);
+        cout << snake[i].cuerpo;
     }
 }
 void Juego::genFruta()
@@ -221,17 +221,19 @@ void Juego::genFruta()
     gotoxy(fruta.x, fruta.y);
     cout << fruta.cuerpo;
 }
-void Juego::cfruta(){
-        if(snake[0].x==fruta.x && snake[0].y==fruta.y){
-                genFruta();
-        tam+=1;
-        snake[tam-1].cuerpo=184;
-        score+=1;
-        if(tam%10==0){
-                        nivel++;
-                        velocidad-=20;
-                }
- 
+void Juego::cfruta()
+{
+    if (snake[0].x == fruta.x && snake[0].y == fruta.y)
+    {
+        genFruta();
+        tam += 1;
+        snake[tam - 1].cuerpo = 184;
+        score += 1;
+        if (tam % 10 == 0)
+        {
+            nivel++;
+            velocidad -= 20;
+        }
     }
 }
 void Juego::muerte()
@@ -280,6 +282,11 @@ void Juego::tecla()
             snake[0].dx = 1;
             snake[0].dy = 0;
         }
+        // Detectar la tecla ESC
+        if (key == 27) // 27 es el código ASCII para ESC
+        {
+            gameover = true; // Termina el juego
+        }
     }
 }
 void Juego::actualizar()
@@ -306,18 +313,20 @@ void Juego::imprimir()
         cout << snake[i].cuerpo;
     }
 }
-void Juego::loop(){
-        while(!gameover){
-                cfruta();
-                puntos();
-                actualizar();
-                imprimir();
-                tecla();
-                tecla();
-                tecla();
-                muerte();
-                Sleep(velocidad);
-        }
+void Juego::loop()
+{
+    while (!gameover)
+    {
+        cfruta();
+        puntos();
+        actualizar();
+        imprimir();
+        tecla();
+        tecla();
+        tecla();
+        muerte();
+        Sleep(velocidad);
+    }
 }
 void Juego::main()
 {
@@ -352,43 +361,51 @@ private:
     int m[10][10];
     string mT[10][10];
     int juegosJugadosBuscaminas = 0; // Variable privada
+
 public:
     void main();
     void incrementarJuegosJugadosBuscaminas() { juegosJugadosBuscaminas++; } // Método para incrementar juegosJugadosBuscaminas
     int obtenerJuegosJugadosBuscaminas() { return juegosJugadosBuscaminas; } // Método para obtener el valor de juegosJugadosBuscaminas
 };
 
-
-// Implementación de los métodos de la clase Buscaminas
 void Buscaminas::main()
 {
+    srand(time(NULL)); // Inicialización de la semilla para rand()
+
     int nivel = 0;
     int vidas = 0;
     int intentos = 0;
     int fila = 0;
     int columna = 0;
     bool fin = false;
-    INICIO:
-    cout<<endl;
-    cout<<"         Bienvenidos al Buscaminas"<<endl;
-    cout<<endl;
-    cout<<"   Este juego consiste en poder seleccionar"<<endl;
-    cout<<"   todos los bloques sin hacer explotar las minas."<<endl;
-    cout<<endl;
-    NIVEL:
-    cout<<endl;
-    cout<<"   selecciona el nivel de juego"<<endl;
-    cout<<endl;
-    cout<<"   Nivel             Vidas           Escribe"<<endl;
-    cout<<endl;
-    cout<<"   Practica          1000            1"<<endl;
-    cout<<"   Facil             8               2"<<endl;
-    cout<<"   Medio             5               3"<<endl;
-    cout<<"   Dificil           3               4"<<endl;
-    cout<<"   Muy Dificil       1               5"<<endl;
-    cout<<endl;
-    cout<<"   Ingresa el tu Nivel: ";cin>>nivel;cout<<endl;
-
+INICIO:
+    cout << endl;
+    cout << "         Bienvenidos al Buscaminas" << endl;
+    cout << endl;
+    cout << "   Este juego consiste en poder seleccionar" << endl;
+    cout << "   todos los bloques sin hacer explotar las minas." << endl;
+    cout << endl;
+NIVEL:
+    cout << endl;
+    cout << "   selecciona el nivel de juego" << endl;
+    cout << endl;
+    cout << "   Nivel             Vidas           Escribe" << endl;
+    cout << endl;
+    cout << "   Practica          1000            1" << endl;
+    cout << "   Facil             8               2" << endl;
+    cout << "   Medio             5               3" << endl;
+    cout << "   Dificil           3               4" << endl;
+    cout << "   Muy Dificil       1               5" << endl;
+    cout << " Salir   6 " << endl;
+    cout << endl;
+    cout << "   Ingresa el tu Nivel: ";
+    cin >> nivel;
+    cout << endl;
+    if (nivel == 6)
+    {
+        cout << "gracias por jugar " << endl;
+        return;
+    }
     switch (nivel)
     {
     case 1:
@@ -429,7 +446,7 @@ void Buscaminas::main()
     default:
         system("cls");
         cout << "Escribe un nivel válido entre 1 y 5" << endl;
-        goto NIVEL; 
+        goto NIVEL;
         break;
     }
 
@@ -439,71 +456,98 @@ void Buscaminas::main()
 
     // Lógica del juego
     while (fin == false)
-    {FIL:
-        cout<<"   digite la fila entre 0 y "<<nivel-1<<" ";cin>>fila;cout<<endl;
-        if (fila == 20) {
-            /* code */
-        }
-        if (fila < 0 || fila > nivel-1) {
-            cout<<"   escribe un numero entre 0 y "<<nivel-1<<" "<<endl;
+    {
+    FIL:
+        cout << "   digite la fila entre 0 y " << nivel - 1 << " ";
+        cin >> fila;
+        cout << endl;
+        if (fila < 0 || fila > nivel - 1)
+        {
+            cout << "   escribe un numero entre 0 y " << nivel - 1 << " " << endl;
             goto FIL;
         }
-        COL:
-        cout<<"   digite la columna entre 0 y "<<nivel-1<<" ";cin>>columna;cout<<endl;
-        if (columna < 0 || columna > nivel-1) {
-            cout<<"   escribe un numero entre 0 y "<<nivel-1<<" "<<endl;
+    COL:
+        cout << "   digite la columna entre 0 y " << nivel - 1 << " ";
+        cin >> columna;
+        cout << endl;
+        if (columna < 0 || columna > nivel - 1)
+        {
+            cout << "   escribe un numero entre 0 y " << nivel - 1 << " " << endl;
             goto COL;
         }
         intentos++;
-        if (m[fila][columna]%2== 0) {
+        if (m[fila][columna] % 2 == 0)
+        {
             mT[fila][columna] = " ";
         }
-        if (m[fila][columna]%2== 1) {
+        if (m[fila][columna] % 2 == 1)
+        {
             mT[fila][columna] = "*";
             vidas--;
-            if (vidas==0) {
-                fin=true;
+            if (vidas == 0)
+            {
+                fin = true;
             }
         }
         system("cls");
-        if (fin==false) {
-            cout<<"                 Buscaminas"<<vidas<<endl;
-            cout<<"     Intentos:"<<intentos<<"      Vidas: "<<vidas-1<<endl;
-            for (int i = 0;i < nivel; i++) {
-                cout<<endl;
-                for (int j = 0; j < nivel; j++) {
-                cout<<"   "<<mT[i][j];
+        if (fin == false)
+        {
+            cout << "                 Buscaminas" << vidas << endl;
+            cout << "     Intentos:" << intentos << "      Vidas: " << vidas - 1 << endl;
+            for (int i = 0; i < nivel; i++)
+            {
+                cout << endl;
+                for (int j = 0; j < nivel; j++)
+                {
+                    cout << "   " << mT[i][j];
                 }
-                cout<<endl;
+                cout << endl;
             }
-            cout<<endl;
+            cout << endl;
         }
-        if (fin == true) {
-            cout<<"                 Buscaminas"<<vidas<<endl;
-            cout<<"     Intentos:"<<intentos<<"      Vidas: "<<vidas<<endl;
-            cout<<endl;
-            cout<<"                     GAME OVER"<<endl;
-            cout<<"                     Has perdido"<<endl;
-            cout<<endl;
+        if (fin == true)
+        {
+            cout << "                 Buscaminas" << vidas << endl;
+            cout << "     Intentos:" << intentos << "      Vidas: " << vidas << endl;
+            cout << endl;
+            cout << "                     GAME OVER" << endl;
+            cout << "                     Has perdido" << endl;
+            cout << endl;
             Sleep(2000);
             system("cls");
-            cout<<"Intentalo nuevamente"<<endl;
+            cout << "Intentalo nuevamente" << endl;
             Sleep(1000);
             system("cls");
             goto INICIO;
         }
+
+        // Dentro del bucle principal del juego de Buscaminas
+        if (_kbhit())
+        {
+            char key = _getch();
+            if (key == 'p' || key == 'P' || key == 'q' || key == 'Q')
+            {
+                fin = true; // Termina el juego
+                break;      // Rompe el bucle principal
+            }
+            // Verificar si la tecla ESC fue presionada
+            if (key == 27) // 27 es el código ASCII para ESC
+            {
+                cout << "Saliendo del juego de Buscaminas..." << endl;
+                fin = true; // Termina el juego
+                break;      // Rompe el bucle principal
+            }
+        }
     }
 }
-
 // Función principal del programa
 int main()
 {
     srand(time(NULL)); // Inicialización de la semilla para rand()
 
-    int opcion;
     Juego juego;
     Buscaminas buscaminas;
-
+    int opcion;
     do
     {
         cout << "Bienvenido al menú de juegos" << endl;
@@ -536,6 +580,5 @@ int main()
             break;
         }
     } while (opcion != 4); // El bucle continúa hasta que el usuario elija salir
-
     return 0;
 }
